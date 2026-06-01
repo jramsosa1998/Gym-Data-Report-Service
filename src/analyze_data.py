@@ -1,5 +1,7 @@
 import pandas as pd
 from pathlib import Path
+from openpyxl.styles import Font, Alignment
+from openpyxl.utils import get_column_letter
 
 Path("reports").mkdir(parents=True, exist_ok=True)
 
@@ -68,12 +70,88 @@ low_attendance_report = df[df["low_attendance_risk"] == True][[
     "cancelled"
 ]]
 
+
+# business-friendly column names for Excel export
+revenue_by_membership_export = revenue_by_membership.rename(columns={
+    "membership_type": "Membership Type",
+    "monthly_fee": "Estimated Monthly Revenue"
+})
+
+members_by_referral_export = members_by_referral.rename(columns={
+    "referral_source": "Referral Source",
+    "member_count": "Member Count"
+})
+
+cancellations_by_membership_export = cancellations_by_membership.rename(columns={
+    "membership_type": "Membership Type",
+    "cancellation_rate": "Cancellation Rate (%)"
+})
+
+low_attendance_report_export = low_attendance_report.rename(columns={
+    "member_id": "Member ID",
+    "membership_type": "Membership Type",
+    "monthly_fee": "Monthly Fee",
+    "sessions_attended": "Sessions Attended",
+    "referral_source": "Referral Source",
+    "cancelled": "Cancelled"
+})
+
+
+# Business insights for Excel report
+top_membership = revenue_by_membership.iloc[0]
+top_referral = members_by_referral.iloc[0]
+
+highest_cancel = cancellations_by_membership.sort_values(
+    "cancellation_rate", ascending=False
+).iloc[0]
+
+insights = [
+    (
+        f"The highest revenue membership type is {top_membership['membership_type']} "
+        f"with ${top_membership['monthly_fee']:.2f} in estimated monthly revenue."
+    ),
+    (
+        f"The strongest referral source is {top_referral['referral_source']} "
+        f"with {top_referral['member_count']} members."
+    ),
+    (
+        f"The membership type with the highest cancellation rate is "
+        f"{highest_cancel['membership_type']} at {highest_cancel['cancellation_rate']}%."
+    ),
+    (
+        f"There are {low_attendance_members} members flagged as low-attendance risk."
+    )
+]
+
+insights_df = pd.DataFrame({
+    "Business Insights": insights
+})
+
 with pd.ExcelWriter("reports/gym_business_report.xlsx") as writer:
     summary.to_excel(writer, sheet_name="Summary", index=False)
-    revenue_by_membership.to_excel(writer, sheet_name="Revenue by Membership", index=False)
-    members_by_referral.to_excel(writer, sheet_name="Referral Sources", index=False)
-    cancellations_by_membership.to_excel(writer, sheet_name="Cancellation Rates", index=False)
-    low_attendance_report.to_excel(writer, sheet_name="Low Attendance Risk", index=False)
+    revenue_by_membership_export.to_excel(writer, sheet_name="Revenue by Membership", index=False)
+    members_by_referral_export.to_excel(writer, sheet_name="Referral Sources", index=False)
+    cancellations_by_membership_export.to_excel(writer, sheet_name="Cancellation Rates", index=False)
+    low_attendance_report_export.to_excel(writer, sheet_name="Low Attendance Risk", index=False)
+    insights_df.to_excel(writer, sheet_name="Business Insights", index=False)
+
+    for sheet_name, worksheet in writer.sheets.items():
+        for cell in worksheet[1]:
+            cell.font = Font(bold=True)
+            cell.alignment = Alignment(horizontal="center")
+
+        for column_cells in worksheet.columns:
+            max_length = 0
+            column_letter = get_column_letter(column_cells[0].column)
+
+            for cell in column_cells:
+                if cell.value is not None:
+                    max_length = max(max_length, len(str(cell.value)))
+
+            adjusted_width = min(max_length + 3, 50)
+            worksheet.column_dimensions[column_letter].width = adjusted_width
+
+        worksheet.freeze_panes = "A2"
 
 print("Business report created: reports/gym_business_report.xlsx")
 print(summary)
