@@ -108,11 +108,15 @@ reports/gym_business_report.xlsx
 
 The Excel report includes:
 
-* Summary
+* Summary metrics
 * Revenue by Membership
 * Referral Sources
 * Cancellation Rates
 * Low Attendance Risk
+* Business Insights
+* Simple charts for revenue, referrals, and cancellation rates
+* Formatted column widths and readable headers
+
 
 ## Files in This Project
 
@@ -172,6 +176,13 @@ The report includes:
 * Referral source performance
 * Cancellation rate by membership type
 
+## Report Output
+
+The final Excel report includes formatted sheets for summary metrics, revenue by membership type, referral source performance, cancellation rates, low-attendance risk members, business insights, and simple charts.
+
+The report is designed to be easy for a local business owner or manager to read without needing to manually inspect the raw data.
+
+
 ## Skills Demonstrated
 
 This project demonstrates:
@@ -204,10 +215,9 @@ Instead of manually reviewing messy spreadsheets, the business receives a cleane
 
 Future improvements could include:
 
-* Adding charts to the Excel report
 * Creating a dashboard-style summary page
-* Adding SQL analysis using the cleaned dataset
 * Building a reusable reporting template for other small businesses
 * Creating a Streamlit dashboard version
 * Adding customer lifetime value estimates
 * Adding monthly trend analysis
+* Adding support for user-uploaded CSV files
