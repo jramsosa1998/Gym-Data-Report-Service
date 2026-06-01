@@ -77,3 +77,36 @@ with pd.ExcelWriter("reports/gym_business_report.xlsx") as writer:
 
 print("Business report created: reports/gym_business_report.xlsx")
 print(summary)
+
+
+
+
+
+print("\n--- Business Insights ---")
+
+top_membership = revenue_by_membership.iloc[0]
+
+top_referral = members_by_referral.iloc[0]
+
+highest_cancel = cancellations_by_membership.sort_values(
+    "cancellation_rate", ascending=False
+).iloc[0]
+
+print(
+    f"The highest revenue membership type is {top_membership['membership_type']} "
+    f"with ${top_membership['monthly_fee']:.2f} in estimated monthly revenue."
+)
+
+print(
+    f"The strongest referral source is {top_referral['referral_source']} "
+    f"with {top_referral['member_count']} members."
+)
+
+print(
+    f"The membership type with the highest cancellation rate is "
+    f"{highest_cancel['membership_type']} at {highest_cancel['cancellation_rate']}%."
+)
+
+print(
+    f"There are {low_attendance_members} members flagged as low-attendance risk."
+)
