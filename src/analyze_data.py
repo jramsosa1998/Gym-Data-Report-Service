@@ -2,6 +2,7 @@ import pandas as pd
 from pathlib import Path
 from openpyxl.styles import Font, Alignment
 from openpyxl.utils import get_column_letter
+from openpyxl.chart import BarChart, Reference
 
 Path("reports").mkdir(parents=True, exist_ok=True)
 
@@ -127,6 +128,35 @@ insights_df = pd.DataFrame({
     "Business Insights": insights
 })
 
+
+def add_bar_chart(worksheet, title, data_col, category_col, min_row, max_row, anchor):
+    chart = BarChart()
+    chart.title = title
+    chart.y_axis.title = "Value"
+    chart.x_axis.title = ""
+
+    data = Reference(
+        worksheet,
+        min_col=data_col,
+        min_row=min_row,
+        max_row=max_row
+    )
+
+    categories = Reference(
+        worksheet,
+        min_col=category_col,
+        min_row=min_row + 1,
+        max_row=max_row
+    )
+
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(categories)
+    chart.height = 8
+    chart.width = 14
+
+    worksheet.add_chart(chart, anchor)
+
+
 with pd.ExcelWriter("reports/gym_business_report.xlsx") as writer:
     summary.to_excel(writer, sheet_name="Summary", index=False)
     revenue_by_membership_export.to_excel(writer, sheet_name="Revenue by Membership", index=False)
@@ -152,6 +182,43 @@ with pd.ExcelWriter("reports/gym_business_report.xlsx") as writer:
             worksheet.column_dimensions[column_letter].width = adjusted_width
 
         worksheet.freeze_panes = "A2"
+    
+
+
+
+    revenue_sheet = writer.sheets["Revenue by Membership"]
+    referral_sheet = writer.sheets["Referral Sources"]
+    cancellation_sheet = writer.sheets["Cancellation Rates"]
+
+    add_bar_chart(
+        worksheet=revenue_sheet,
+        title="Revenue by Membership Type",
+        data_col=2,
+        category_col=1,
+        min_row=1,
+        max_row=len(revenue_by_membership_export) + 1,
+        anchor="A10"
+    )
+
+    add_bar_chart(
+        worksheet=referral_sheet,
+        title="Members by Referral Source",
+        data_col=2,
+        category_col=1,
+        min_row=1,
+        max_row=len(members_by_referral_export) + 1,
+        anchor="A10"
+    )
+
+    add_bar_chart(
+        worksheet=cancellation_sheet,
+        title="Cancellation Rate by Membership Type",
+        data_col=2,
+        category_col=1,
+        min_row=1,
+        max_row=len(cancellations_by_membership_export) + 1,
+        anchor="A10"
+    )
 
 print("Business report created: reports/gym_business_report.xlsx")
 print(summary)
