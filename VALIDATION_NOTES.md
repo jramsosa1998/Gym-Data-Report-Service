@@ -6,7 +6,6 @@
 - Aug. 6 continuation sheet was treated as a continuation, not a duplicate.
 
 ## Attendance
-## Attendance
 - Week 1 was directly cross-checked against photographed sign-in records: 197 visits.
 - Weeks 2–4 use verified operational attendance inputs.
 - Full-week totals used in the project: Week 1 = 197, Week 2 = 188, Week 3 = 189, Week 4 = 191.
