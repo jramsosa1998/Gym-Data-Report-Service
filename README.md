@@ -79,12 +79,12 @@ A standardized digital sales / attendance / renewal log would make future report
 ## Project files
 
 ```text
-gym_data_report_final/
-├── Gym_Data_Report_Interview_Final.xlsx
+Gym-Data-Report-Service/
+├── Gym_Data_Report.xlsx
+├── Gym_Data_Keypoints_August.png
 ├── gym_analysis.py
 ├── README.md
 ├── VALIDATION_NOTES.md
-├── INTERVIEW_TALK_TRACK.md
 ├── requirements.txt
 ├── data/
 │   ├── august_daily_operations.csv
