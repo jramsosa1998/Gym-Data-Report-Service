@@ -81,7 +81,6 @@ A standardized digital sales / attendance / renewal log would make future report
 ```text
 Gym-Data-Report-Service/
 ├── Gym_Data_Report.xlsx
-├── Gym_Data_Keypoints_August.png
 ├── gym_analysis.py
 ├── README.md
 ├── VALIDATION_NOTES.md
