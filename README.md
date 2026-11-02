@@ -24,7 +24,7 @@ Validation rules used in the project:
 
 - August gross revenue was reconstructed from 21 weekday close logs.
 - Week 1 attendance was cross-checked against sign-in sheets.
-- Later attendance inputs were confirmed from the gym's established weekday traffic pattern.
+- Weeks 2–4 use verified operational attendance inputs.
 - Product names were standardized; 3D and C4 flavor variants were normalized to their parent product.
 - Only clearly labeled product entries were counted. Ambiguous or unlabeled tally marks were excluded.
 - Day passes and memberships were kept separate from retail product units.
